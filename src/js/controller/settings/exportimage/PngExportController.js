@@ -32,6 +32,8 @@
     var downloadPixiButton = document.querySelector('.png-pixi-download-button');
     var dataUriButton = document.querySelector('.datauri-open-button');
     var selectedFrameDownloadButton = document.querySelector('.selected-frame-download-button');
+	
+    var batchExportDownloadButton = document.querySelector('.batch-export-download-button');
 
     this.pixiInlineImageCheckbox = document.querySelector('.png-pixi-inline-image-checkbox');
 
@@ -43,6 +45,7 @@
     this.addEventListener(downloadPixiButton, 'click', this.onPixiDownloadClick_);
     this.addEventListener(dataUriButton, 'click', this.onDataUriClick_);
     this.addEventListener(selectedFrameDownloadButton, 'click', this.onDownloadSelectedFrameClick_);
+    this.addEventListener(batchExportDownloadButton, 'click', this.OnDownloadBatchLayers_);
     $.subscribe(Events.EXPORT_SCALE_CHANGED, this.onScaleChanged_);
   };
 
@@ -241,5 +244,26 @@
 
     var fileName = name + '-' + (frameIndex + 1) + '.png';
     this.downloadCanvas_(canvas, fileName);
+  };
+  
+  ns.PngExportController.prototype.OnDownloadBatchLayers_ = function (evt) {
+    var frameIndex = this.piskelController.getCurrentFrameIndex();
+    var name = this.piskelController.getPiskel().getDescriptor().name;
+	var zoom = this.exportController.getExportZoom();
+		
+    var canvasses = this.piskelController.renderFrameLayers(frameIndex, true);
+	var layers = this.piskelController.getLayers();
+
+	for (let i = 0; i < canvasses.length; i++) {
+		var canvas = canvasses[i];
+		
+		if (zoom != 1) {
+			canvas = pskl.utils.ImageResizer.resize(canvas, canvas.width * zoom, canvas.height * zoom, false);
+		}
+		
+		var layerName = layers[i].getName();
+		var fileName = name + '-' + layerName + '.png';
+		this.downloadCanvas_(canvas, fileName);
+	}
   };
 })();

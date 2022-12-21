@@ -85,6 +85,23 @@
       });
 
       return canvas;
+    },
+	
+	renderAllLayers : function (layers, index, preserveOpacity) {
+      var width = layers[0].getFrameAt(index).getWidth();
+      var height = layers[0].getFrameAt(index).getHeight();
+	  
+	  var canvasses = [];
+
+	  layers.forEach(function (l) {
+		var canvas = pskl.utils.CanvasUtils.createCanvas(width, height);
+		var context = canvas.getContext('2d');
+		canvasses.push(canvas);
+        var render = ns.LayerUtils.renderFrameAt(l, index, preserveOpacity);
+        context.drawImage(render, 0, 0, width, height, 0, 0, width, height);
+      });
+
+      return canvasses;
     }
   };
 

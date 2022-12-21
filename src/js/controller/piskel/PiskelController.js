@@ -104,6 +104,10 @@
   ns.PiskelController.prototype.renderFrameAt = function (index, preserveOpacity) {
     return pskl.utils.LayerUtils.flattenFrameAt(this.getLayers(), index, preserveOpacity);
   };
+  
+  ns.PiskelController.prototype.renderFrameLayers = function (index, preserveOpacity) {
+	return pskl.utils.LayerUtils.renderAllLayers(this.getLayers(), index, preserveOpacity);
+  };
 
   ns.PiskelController.prototype.hasFrameAt = function (index) {
     return !!this.getCurrentLayer().getFrameAt(index);

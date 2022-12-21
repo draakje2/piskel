@@ -124,6 +124,7 @@
     var layerItemHtml = pskl.utils.Template.replace(this.layerItemTemplate_, {
       'layername' : layer.getName(),
       'layerindex' : index,
+	  'export-state' : true,
       'isselected:current-layer-item' : isSelected,
       'opacity' : layer.getOpacity()
     });
